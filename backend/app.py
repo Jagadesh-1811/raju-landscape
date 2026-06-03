@@ -8,7 +8,8 @@ from supabase import create_client, Client
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)  # Enable Cross-Origin Resource Sharing for your React frontend
+frontend_url = os.getenv("FRONTEND_URL", "*")
+CORS(app, resources={r"/api/*": {"origins": frontend_url}})  # Enable Cross-Origin Resource Sharing for your React frontend
 
 # Initialize Supabase client
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").strip()
