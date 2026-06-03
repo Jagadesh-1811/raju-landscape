@@ -14,8 +14,14 @@ import AdminPanel from './components/AdminPanel';
 
 export default function App() {
   const [currentPath, setCurrentPath] = useState<string>(() => window.location.pathname);
-  
-  // Categorization & State
+
+  useEffect(() => {
+    // Sync path on initial load (handles direct URL visits after Vercel rewrite)
+    setCurrentPath(window.location.pathname);
+    const handlePopState = () => setCurrentPath(window.location.pathname);
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
   const [selectedCategory, setSelectedCategory] = useState<string>('All Plants');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
@@ -35,12 +41,6 @@ export default function App() {
     setCurrentPath(path);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-
-  useEffect(() => {
-    const handlePopState = () => setCurrentPath(window.location.pathname);
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
 
   useEffect(() => {
     if (currentPath === '/admin-portal' && !isAdmin) {
