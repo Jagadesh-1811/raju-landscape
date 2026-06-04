@@ -37,7 +37,7 @@ export default function Header({ cartItemCount, onCartClick, isAdmin = false, on
               <Leaf className="w-6 h-6 animate-pulse" />
             </div>
             <div>
-              <span className="block font-display text-sm font-bold tracking-tight text-forest-900 leading-tight">
+              <span className="block font-display text-lg font-bold tracking-tight text-forest-900 leading-tight">
                 Raju Landscape
               </span>
               <span className="flex items-center gap-0.5 text-[10px] text-forest-600 font-mono">
