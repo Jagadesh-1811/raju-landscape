@@ -1,6 +1,5 @@
 import os
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask import Flask, request, jsonify, make_response
 from dotenv import load_dotenv
 from supabase import create_client, Client
 
@@ -8,8 +7,30 @@ from supabase import create_client, Client
 load_dotenv()
 
 app = Flask(__name__)
-frontend_url = os.getenv("FRONTEND_URL", "*")
-CORS(app, resources={r"/api/*": {"origins": frontend_url}})  # Enable Cross-Origin Resource Sharing for your React frontend
+FRONTEND_URL = os.getenv("FRONTEND_URL", "*")
+
+# ---------------------------------------------------------------------------
+# Manual CORS headers — added to EVERY response so no browser request is
+# ever blocked, regardless of status code or library quirks.
+# ---------------------------------------------------------------------------
+@app.after_request
+def add_cors_headers(response):
+    # Dynamically reflect back the request's Origin header so the response
+    # always matches whatever port/host the frontend is running on.
+    origin = request.headers.get("Origin", "")
+    if origin:
+        response.headers["Access-Control-Allow-Origin"] = origin
+    else:
+        response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+    response.headers["Access-Control-Allow-Credentials"] = "true"
+    return response
+
+# Handle preflight OPTIONS requests globally before any other logic runs.
+@app.route("/api/<path:path>", methods=["OPTIONS"])
+def handle_preflight(path):
+    return make_response("", 204)
 
 # Initialize Supabase client
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").strip()

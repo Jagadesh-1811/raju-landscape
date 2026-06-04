@@ -37,7 +37,7 @@ export default function Header({ cartItemCount, onCartClick, isAdmin = false, on
               <Leaf className="w-6 h-6 animate-pulse" />
             </div>
             <div>
-              <span className="block font-display text-xl font-bold tracking-tight text-forest-900 leading-tight">
+              <span className="block font-display text-sm font-bold tracking-tight text-forest-900 leading-tight">
                 Raju Landscape
               </span>
               <span className="flex items-center gap-0.5 text-[10px] text-forest-600 font-mono">
@@ -56,7 +56,7 @@ export default function Header({ cartItemCount, onCartClick, isAdmin = false, on
           </nav>
 
           {/* Right side: Cart + Hamburger */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             {/* Checkout/Order list Button */}
             <button
               onClick={onCartClick} className='bg-forest-500 hover:bg-forest-600 text-white px-4 py-2 rounded-md relative transition-colors flex items-center gap-2 text-sm font-medium mt-0.5 '>
